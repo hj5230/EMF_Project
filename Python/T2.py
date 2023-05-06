@@ -3,12 +3,12 @@ import numpy as np
 def func(A, B, C, x, y):
     return A * x**2 - B * x * y + C * y**2 + x - y
 
-def numerical_gradient(A, B, C, x, y, h=1e-6):
+def numerical_gradient(A, B, C, x, y, h=1e-5):
     fx = (func(A, B, C, x + h, y) - func(A, B, C, x, y)) / h
     fy = (func(A, B, C, x, y + h) - func(A, B, C, x, y)) / h
     return np.array([fx, fy])
 
-def numerical_hessian(A, B, C, x, y, h=1e-6):
+def numerical_hessian(A, B, C, x, y, h=1e-5):
     fxx = (numerical_gradient(A, B, C, x + h, y)[0] - numerical_gradient(A, B, C, x, y)[0]) / h
     fxy = (numerical_gradient(A, B, C, x + h, y)[1] - numerical_gradient(A, B, C, x, y)[1]) / h
     fyx = (numerical_gradient(A, B, C, x, y + h)[0] - numerical_gradient(A, B, C, x, y)[0]) / h
