@@ -36,7 +36,7 @@ void newtons_method(double A, double B, double C, double x0, double y0, int iter
         double fxy;
         func(A, B, C, xk[0], xk[1], &fxy);
         printf("Iteration %d:\n x = %.10f, y = %.10f, f(x, y) = %.10f\n", i + 1, xk[0], xk[1], fxy);
-        fprintf(f, "%d;%.9f;%.9f;%.6f\n", i + 1, xk[0], xk[1], fxy);
+        fprintf(f, "%d;%.6f;%.6f;%.9f\n", i + 1, xk[0], xk[1], fxy);
     }
 }
 
