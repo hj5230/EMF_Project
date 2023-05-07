@@ -9,24 +9,24 @@ double func(double A, double B, double C, double x, double y)
 
 void numerical_gradient(double A, double B, double C, double x, double y, double h, double *fx, double *fy)
 {
-    *fx = (func(A, B, C, x + h, y) - func(A, B, C, x, y)) / h;
-    *fy = (func(A, B, C, x, y + h) - func(A, B, C, x, y)) / h;
+    *fx = (func(A, B, C, x + h, y) - func(A, B, C, x - h, y)) / (2 * h);
+    *fy = (func(A, B, C, x, y + h) - func(A, B, C, x, y - h)) / (2 * h);
 }
 
 void numerical_hessian(double A, double B, double C, double x, double y, double h, double hessian[2][2])
 {
     double fx_x, fx_y, fy_x, fy_y;
     numerical_gradient(A, B, C, x + h, y, h, &fx_x, &fy_x);
-    numerical_gradient(A, B, C, x, y, h, &fx_y, &fy_y);
+    numerical_gradient(A, B, C, x - h, y, h, &fx_y, &fy_y);
 
-    hessian[0][0] = (fx_x - fx_y) / h;
-    hessian[0][1] = (fy_x - fy_y) / h;
+    hessian[0][0] = (fx_x - fx_y) / (2 * h);
+    hessian[0][1] = (fy_x - fy_y) / (2 * h);
 
     numerical_gradient(A, B, C, x, y + h, h, &fx_x, &fy_x);
-    numerical_gradient(A, B, C, x, y, h, &fx_y, &fy_y);
+    numerical_gradient(A, B, C, x, y - h, h, &fx_y, &fy_y);
 
-    hessian[1][0] = (fx_x - fx_y) / h;
-    hessian[1][1] = (fy_x - fy_y) / h;
+    hessian[1][0] = (fx_x - fx_y) / (2 * h);
+    hessian[1][1] = (fy_x - fy_y) / (2 * h);
 }
 
 double dynamic_alpha(double *xk, double *gk, double Hk[2][2])
@@ -34,7 +34,7 @@ double dynamic_alpha(double *xk, double *gk, double Hk[2][2])
     return (gk[0] * gk[0] + gk[1] * gk[1]) / (gk[0] * (Hk[0][0] * gk[0] + Hk[0][1] * gk[1]) + gk[1] * (Hk[1][0] * gk[0] + Hk[1][1] * gk[1]));
 }
 
-void newtons_method_numerical(double A, double B, double C, double x0, double y0, double h, int iteration, FILE* f)
+void newtons_method_numerical(double A, double B, double C, double x0, double y0, double h, int iteration, FILE *f)
 {
     double xk[2] = {x0, y0};
     double gk[2], Hk[2][2], alpha;
@@ -59,11 +59,11 @@ void newtons_method_numerical(double A, double B, double C, double x0, double y0
 
 int main()
 {
-    char* fName = "./T2_iterations.txt";
-    FILE* f = fopen(fName, "w");
+    char *fName = "./T2_iterations.txt";
+    FILE *f = fopen(fName, "w");
     int iteration;
     double A, B, C, x0, y0, h;
-    newtons_method_numerical(A = 3, B = -2, C = 1, x0 = 3, y0 = 10, h = 1e-6, iteration = 100, f);
+    newtons_method_numerical(A = 3, B = -2, C = 1, x0 = 3, y0 = 10, h = 1e-7, iteration = 100, f);
     fclose(f);
     return 0;
 }
